@@ -1,5 +1,8 @@
 import os
 import logging
+import RPi.GPIO as GPIO
+
+relay_pin = 23
 
 # Set up logger
 logger = logging.getLogger(__name__)
@@ -12,9 +15,11 @@ file_handler.setFormatter(formatter)
 logger.addHandler(file_handler)
 
 def open_lock():
+    GPIO.output(relay_pin, GPIO.HIGH)
     print("lock opening")
     logger.info("lock opening")
 
 def close_lock():
+    GPIO.input(relay_pin)
     print("lock closeing")
     logger.info("lock closeing")
