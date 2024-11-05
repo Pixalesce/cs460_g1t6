@@ -5,8 +5,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
-import com.amazonaws.mobile.client.AWSMobileClient;
-import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ListObjectsV2Result;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
@@ -17,29 +15,22 @@ import java.util.Arrays;
 import java.util.List;
 
 public class NotificationsViewModel extends ViewModel {
-
-    // private final MutableLiveData<List<String>> imageUrls;
     private final MutableLiveData<List<String>> imageUrls = new MutableLiveData<>();
     private final AmazonS3Client s3Client;
-    private static final String BUCKET_NAME = "sscompanion-images"; // Replace with your bucket name
 
+    // Define supported image file extensions
+    private static final List<String> IMAGE_EXTENSIONS = Arrays.asList(".jpg", ".jpeg", ".png", ".gif");
+
+    private static final String BUCKET_NAME = "sscompanion-images";
 
     public NotificationsViewModel() {
-        // imageUrls = new MutableLiveData<>();
-        // imageUrls.setValue(Arrays.asList(
-        //         "https://sscompanion-images.s3.ap-southeast-1.amazonaws.com/uploaded-image.jpg",
-        //         "https://sscompanion-images.s3.ap-southeast-1.amazonaws.com/images.jpg"
-        // ));
-
         // Initialize AWS Credentials
         CognitoCachingCredentialsProvider credentialsProvider = AWSClient.getCredentialsProvider();
         s3Client = new AmazonS3Client(credentialsProvider);
 
         // Fetch image URLs from S3
         fetchImageUrlsFromS3();
-
     }
-
 
     private void fetchImageUrlsFromS3() {
         new Thread(() -> {
@@ -53,7 +44,11 @@ public class NotificationsViewModel extends ViewModel {
                     String key = os.getKey();
                     // Construct the URL based on your bucket's configuration
                     String url = s3Client.getResourceUrl(BUCKET_NAME, key);
-                    urls.add(url);
+                    
+                    // Check if the file is an image
+                    if (isImageFile(key)) {
+                        urls.add(url);
+                    }
                 }
 
                 // Update LiveData on the main thread
@@ -66,6 +61,14 @@ public class NotificationsViewModel extends ViewModel {
         }).start();
     }
 
+    private boolean isImageFile(String filename) {
+        for (String extension : IMAGE_EXTENSIONS) {
+            if (filename.toLowerCase().endsWith(extension)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     public LiveData<List<String>> getImageUrls() {
         return imageUrls;
