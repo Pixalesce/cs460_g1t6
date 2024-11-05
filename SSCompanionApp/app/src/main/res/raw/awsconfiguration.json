@@ -1,0 +1,19 @@
+{
+    "IdentityManager": {
+        "Default": {}
+    },
+    "CredentialsProvider": {
+        "CognitoIdentity": {
+            "Default": {
+                "PoolId": "ap-southeast-1:d888d632-c125-44e4-9562-5d51f786c9a2",
+                "Region": "ap-southeast-1"
+            }
+        }
+    },
+    "S3TransferUtility": {
+        "Default": {
+            "Bucket": "sscompanion-images",
+            "Region": "ap-southeast-1"
+        }
+    }
+}

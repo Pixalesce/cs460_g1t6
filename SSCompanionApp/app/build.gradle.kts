@@ -53,6 +53,20 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.4.0"))
     implementation("com.google.firebase:firebase-messaging")
 
+    // Glide library for image loading
+    implementation("com.github.bumptech.glide:glide:4.15.1")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.15.1")
+
+    // RecyclerView - View list of images / videos
+    implementation("androidx.recyclerview:recyclerview:1.3.0")
+
+    // AWS SDK for S3
+    implementation("com.amazonaws:aws-android-sdk-s3:2.45.0")
+    implementation("com.amazonaws:aws-android-sdk-core:2.45.0")    
+
+    // AWS Mobile Client dependency**
+    implementation("com.amazonaws:aws-android-sdk-mobile-client:2.45.0")
+
     // Exclude ProfileInstaller to avoid hanging issues
     configurations.all {
         exclude(group = "androidx.profileinstaller", module = "profileinstaller")
