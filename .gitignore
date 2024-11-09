@@ -36,4 +36,4 @@ venv
 *.env
 *env.*
 device_mac.txt
-logs/*.log
+*.log
