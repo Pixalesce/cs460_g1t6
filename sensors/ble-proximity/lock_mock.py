@@ -20,14 +20,12 @@ GPIO.setup(relay_pin, GPIO.IN)
 
 def open_lock():
     GPIO.setup(relay_pin, GPIO.OUT, initial=GPIO.HIGH)
-    # GPIO.output(relay_pin, GPIO.HIGH)
     GPIO.output(relay_pin, False)
-    print("lock opening")
+    # print("lock opening")
     logger.info("lock opening")
 
 def close_lock():
     GPIO.setup(relay_pin, GPIO.IN)
     GPIO.input(relay_pin)
-    # GPIO.output(relay_pin, True)
-    print("lock closeing")
+    # print("lock closeing")
     logger.info("lock closeing")
