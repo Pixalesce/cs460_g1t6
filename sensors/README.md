@@ -4,8 +4,7 @@
 2. clone this directory
 3. install dependencies
 ```bash
-sudo apt-get install python3-dbus
-sudo apt-get install bluez
+sudo apt install libgirepository1.0-dev libdbus-1-dev libcairo2-dev gobject-introspection libgl1 python3-dbus bluez
 ```
 4. set up python virtual environment
 ```bash
