@@ -30,3 +30,10 @@ tmp/
 *.old
 *.tmp
 
+.DS_Store
+__pycache__
+venv
+*.env
+*env.*
+device_mac.txt
+logs/*.log
