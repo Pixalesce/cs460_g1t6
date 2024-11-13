@@ -1,6 +1,7 @@
 import time
 import sys
 import RPi.GPIO as GPIO
+# import requests
 from hx711 import HX711
 
 def cleanAndExit():
@@ -50,27 +51,61 @@ print("Tare done! Add weight now...")
 # to use both channels, you'll need to tare them both
 #hx.tare_A()
 #hx.tare_B()
+previous_val = 0
+# api call
+# while True:
+#     try:
+#         # Get the current weight
+#         val = hx.get_weight(5)
+#         print("Current value:", val)
+
+#         # Check if the value increased by 50% or more
+#         if previous_val != 0 and val >= previous_val * 1.5:
+#             # Send API call with "Delivery Received" header
+#             headers = {"Status": "Delivery Received"}
+#             response = requests.post("http://<your_ip_address>:5000/weight_event", headers=headers)
+#             print("API called with header 'Delivery Received', Response:", response.status_code)
+
+#         # Check if the value dropped by 50% or more, or is near 0/negative
+#         elif val <= previous_val * 0.5 or val <= 0:
+#             # Send API call with "Parcel Taken" header
+#             headers = {"Status": "Parcel Taken"}
+#             response = requests.post("http://<your_ip_address>:5000/weight_event", headers=headers)
+#             print("API called with header 'Parcel Taken', Response:", response.status_code)
+
+#         # Update previous value
+#         previous_val = val
+
+#         # Reset the sensor and wait before the next reading
+#         hx.power_down()
+#         hx.power_up()
+#         time.sleep(0.1)
+
+#     except (KeyboardInterrupt, SystemExit):
+#         cleanAndExit()
+
+previous_val = 0
 
 while True:
     try:
-        # These three lines are usefull to debug wether to use MSB or LSB in the reading formats
-        # for the first parameter of "hx.set_reading_format("LSB", "MSB")".
-        # Comment the two lines "val = hx.get_weight(5)" and "print val" and uncomment these three lines to see what it prints.
-        
-        # np_arr8_string = hx.get_np_arr8_string()
-        # binary_string = hx.get_binary_string()
-        # print binary_string + " " + np_arr8_string
-        
-        # Prints the weight. Comment if you're debbuging the MSB and LSB issue.
+        # Get the current weight
         val = hx.get_weight(5)
-        print(val)
+        print("Current value:", val)
 
-        # To get weight from both channels (if you have load cells hooked up 
-        # to both channel A and B), do something like this
-        #val_A = hx.get_weight_A(5)
-        #val_B = hx.get_weight_B(5)
-        #print "A: %s  B: %s" % ( val_A, val_B )
+        # Check if the value increased by 50% or more
+        if previous_val != 0 and val >= previous_val * 1.5:
+            # Print message for "Delivery Received"
+            print("Delivery Received: Value increased by 50% or more.")
 
+        # Check if the value dropped by 50% or more, or is near 0/negative
+        elif val <= previous_val * 0.5 or val <= 0:
+            # Print message for "Parcel Taken"
+            print("Parcel Taken: Value dropped by 50% or is near 0 or negative.")
+
+        # Update previous value
+        previous_val = val
+
+        # Reset the sensor and wait before the next reading
         hx.power_down()
         hx.power_up()
         time.sleep(0.1)
